@@ -1,19 +1,38 @@
 from fastapi import FastAPI
-from fastapi import BackgroundTasks
 import uvicorn
+import asyncio
+from aioredis import Redis
+import aioredis
 
 app = FastAPI()
 
 
-def task(N, N1, d, pause):
-    pass
+async def createRedisPool():
+    pool = await Redis.create_pool(
+        '127.0.0.1',
+        decode_responses=True,
+        max_connections=10
+    )
+    return pool
+
+
+async def task(iters, start_from, step, interval):
+    r_connection = await rp.acq
+    current = start_from
+    for i in range(iters):
+        current += step
+        await asyncio.sleep(interval)
+        yield current
 
 
 @app.get("/addtask")
-async def addtask():
+async def addtask(N: int, N1: int, step: int, interval: int):
+    # N = int(request.headers.get("N"))
+    # N1 = int(request.headers.get("N1"))
+    # step = int(request.headers.get("d"))
+    # interval = int(request.headers.get("interval"))
 
-    BackgroundTasks.add_task(task, N, N1, d, pause)
-    pass
+    state = await task(iters=N, start_from=N1, step=step, interval=interval)
 
 
 @app.get("/gettasks")
