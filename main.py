@@ -2,7 +2,7 @@ from fastapi import FastAPI
 import uvicorn
 import asyncio
 from tasks import Tasks
-
+from fastapi import BackgroundTasks
 # Написать апи в котором стартует выполнение вычисления арифметической прогрессии.
 # 1 метод стартует прогрессию, параметры n1 n d и временной интервал между вычислениями.
 # 2 метод вывод статуса всех текущих вычислений.
@@ -25,25 +25,22 @@ app.tasks = Tasks()
 #             continue
 #         coroutines.append(task)
 #     return coroutines
-
-
-async def progress(iters, start_from, step, interval):
+async def task(iters, start_from, step, interval):
     print("Начали задачу")
     current = start_from
     for i in range(iters):
-        current += step
-        print('task step:', i)
+        current += i
+        print(f'task step={i}  progress={current}')
         await asyncio.sleep(interval)
-        yield current
 
 
 @app.get("/addtask")
-async def addtask(N: int = 10, N1: int = 1, step: int = 1, interval: int = 1):
-    print("command to add task")
-    # asyncio.create_task(progress(N, N1, step, interval))
+async def addtask(
+        back_ground_tasks: BackgroundTasks,
+        N: int = 10, N1: int = 1, step: int = 1, interval: int = 1):
+    back_ground_tasks.add_task(task, N, N1, step, interval)
     return {
         "response": "started",
-        "N": N, "N1": N1, "step": step, "interval": interval
     }
 
 
@@ -53,7 +50,13 @@ async def gettasks():
     pass
 
 
-if __name__ == "__main__":
+@app.get("/")  # объявляем страницу
+async def main():  # создаем асинхронную функцию
+    # с помощью асинхронной библиотеки запускаем наш пример
+    await asyncio.sleep(10)
+    return {"message": "Hello World"}
 
+
+if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1",
                 port=5000, log_level="info", workers=4)
