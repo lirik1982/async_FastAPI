@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 import uvicorn
 import asyncio
 from tasks import Tasks
@@ -18,43 +18,39 @@ app = FastAPI()
 app.tasks = Tasks()
 
 
-# async def get_coroutines():
-#     coroutines = []
-#     for task in asyncio.all_tasks():
-#         if task.done():
-#             continue
-#         coroutines.append(task)
-#     return coroutines
-async def task(iters, start_from, step, interval):
+async def get_coroutines():
+    coroutines = []
+    for task in asyncio.all_tasks():
+        if task.done():
+            continue
+        coroutines.append(task)
+    return coroutines
+
+
+async def mytask(iters, start_from, step, interval):
     print("Начали задачу")
     current = start_from
     for i in range(iters):
-        current += i
+        current += step
         print(f'task step={i}  progress={current}')
         await asyncio.sleep(interval)
 
 
+@app.get("/gettasks")
+async def gettasks(request):
+    return get_coroutines()
+
+
 @app.get("/addtask")
 async def addtask(
-        back_ground_tasks: BackgroundTasks,
-        N: int = 10, N1: int = 1, step: int = 1, interval: int = 1):
-    back_ground_tasks.add_task(task, N, N1, step, interval)
+    task_api: Tasks = Depends(gettasks),
+    N: int = 10, N1: int = 1, step: int = 1, interval: int = 1,
+):
+    task_api.add_task(N=N, N1=N1, step=step, interval=interval)
+    # back_ground_tasks.add_task(mytask, N, N1, step, interval)
     return {
         "response": "started",
     }
-
-
-@app.get("/gettasks")
-async def gettasks():
-    # print(get_coroutines())
-    pass
-
-
-@app.get("/")  # объявляем страницу
-async def main():  # создаем асинхронную функцию
-    # с помощью асинхронной библиотеки запускаем наш пример
-    await asyncio.sleep(10)
-    return {"message": "Hello World"}
 
 
 if __name__ == "__main__":
