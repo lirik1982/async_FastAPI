@@ -37,14 +37,14 @@ async def mytask(iters, start_from, step, interval):
 
 
 @app.get("/gettasks")
-async def gettasks(request):
+async def get_tasks_api(request):
     return get_coroutines()
 
 
 @app.get("/addtask")
 async def addtask(
-    task_api: Tasks = Depends(gettasks),
     N: int = 10, N1: int = 1, step: int = 1, interval: int = 1,
+    task_api: Tasks = Depends(get_tasks_api),
 ):
     task_api.add_task(N=N, N1=N1, step=step, interval=interval)
     # back_ground_tasks.add_task(mytask, N, N1, step, interval)
