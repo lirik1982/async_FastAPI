@@ -21,3 +21,6 @@ class Tasks:
     def update_status(self, iters, start_from, step):
 
         pass
+
+    def get_active(self):
+        pass
