@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Request
 import uvicorn
 import asyncio
 from tasks import Tasks
@@ -18,27 +18,9 @@ app = FastAPI()
 app.tasks = Tasks()
 
 
-async def get_coroutines():
-    coroutines = []
-    for task in asyncio.all_tasks():
-        if task.done():
-            continue
-        coroutines.append(task)
-    return coroutines
-
-
-async def mytask(iters, start_from, step, interval):
-    print("Начали задачу")
-    current = start_from
-    for i in range(iters):
-        current += step
-        print(f'task step={i}  progress={current}')
-        await asyncio.sleep(interval)
-
-
-@app.get("/gettasks")
-async def get_tasks_api(request):
-    return get_coroutines()
+# @app.get("/gettasks")
+async def get_tasks_api(request: Request):
+    return request.app.tasks
 
 
 @app.get("/addtask")
