@@ -22,7 +22,7 @@ async def addtask(
     task_api: Tasks = Depends(get_tasks_api),
 ):
     # print(N, N1, step, interval)
-    task_api.add_task(
+    await task_api.add_task(
         N=N, N1=N1, step=step, interval=interval)
     return {
         "response": "started",

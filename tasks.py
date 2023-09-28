@@ -15,19 +15,18 @@ class Tasks:
 
     async def _mytask(self, iters, start_from, step, interval):
         print("Начали задачу")
-        current = start_from
-        for i in range(iters):
-            current += step
+        current = int(start_from)
+        for i in range(int(iters)):
+            current += int(step)
             print(f'task step={i}  progress={current}')
-            await asyncio.sleep(interval)
+            await asyncio.sleep(int(interval))
 
     async def add_task(
         self,
-        back_ground_tasks=BackgroundTasks,
         N=10, N1=1, step=1, interval=1,
     ):
         print("class starting")
-        await back_ground_tasks.add_task(self._mytask, N, N1, step, interval)
+        await asyncio.create_task(self._mytask(N, N1, step, interval))
         return {
             "response": "started",
         }
