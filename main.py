@@ -18,7 +18,7 @@ async def get_tasks_api(request: Request):
     return request.app.tasks
 
 
-@app.get("/addtask")
+@app.get("/addtask/")
 async def addtask(N: int = 10, N1: int = 1, step: int = 1, interval: int = 1,
                   task_api: Tasks = Depends(get_tasks_api),
                   ):
@@ -31,7 +31,7 @@ async def addtask(N: int = 10, N1: int = 1, step: int = 1, interval: int = 1,
     }
 
 
-@app.get("/gettasks")
+@app.get("/gettasks/")
 async def get_tasks():
     r = [value for value in app.tasks.status.items()]
     return r
