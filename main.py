@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, BackgroundTasks
+from fastapi import FastAPI, Depends, BackgroundTasks, Request
 
 import uvicorn
 
@@ -12,12 +12,16 @@ app = FastAPI()
 app.tasks = Tasks()
 
 
+async def get_tasks_api(request: Request):
+    return request.app.tasks
+
+
 @app.get("/addtask/")
 async def addtask(
     N=10, N1=1, step=1, interval=1,
-    task_api: Tasks = Depends(),
+    task_api: Tasks = Depends(get_tasks_api),
 ):
-    print(N, N1, step, interval)
+    # print(N, N1, step, interval)
     task_api.add_task(
         N=N, N1=N1, step=step, interval=interval)
     return {
