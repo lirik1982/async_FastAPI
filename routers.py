@@ -13,7 +13,7 @@ router = APIRouter()
 
 
 class TaskRequest(BaseModel):
-    """Определяет параметры tast.add."""
+    """ Tasks init values."""
 
     iters: int = 25
     start_from: int = 0
@@ -22,11 +22,10 @@ class TaskRequest(BaseModel):
 
 
 async def get_tasks_api(request: Request) -> Tasks:
-    """нужна для task depends.
+    """Depends supply.
 
     Args:
         request(Request): application.
-
     Returns:
         Tasks: tasks list.
     """
@@ -38,25 +37,20 @@ async def add_task(
     task_request: TaskRequest,
     task_api: Tasks = Depends(get_tasks_api),
 ):
-    """нужна для task depends.
+    """Runs task.
 
     Args:
-        task_request: task properties
+        task_request: task properties.
         task_api: depends Tasks.
-
     Returns:
-        dict: ok response.
+        none.
     """
     await task_api.add_task(
-        N=task_request.iters,
-        N1=task_request.start_from,
+        iters=task_request.iters,
+        start_from=task_request.start_from,
         step=task_request.step,
         interval=task_request.interval,
     )
-
-    return {
-        'response': 'started',
-    }
 
 
 @router.get('/get/')
@@ -65,8 +59,7 @@ async def get_tasks(request: Request):
 
     Args:
         request: need for getting app.tasks.
-
     Returns:
-        dict: tasks status list
+        dict: tasks status list.
     """
     return dict(request.app.tasks.status.items())

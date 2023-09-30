@@ -1,0 +1,10 @@
+version: '4'
+
+services:
+  web:
+    build: .
+    command: uvicorn main:app --reload
+    ports:
+     - 8000:8000	
+    extra_hosts:
+     - "host.docker.internal:host-gateway"

@@ -20,7 +20,7 @@ class Tasks():
         )
 
     async def _mytask(
-        self, task_id: int, iters, start_from, step, interval
+        self, task_id: int, iters, start_from, shift, interval,
     ):
         """ Async task.
 
@@ -34,13 +34,13 @@ class Tasks():
             none.
         """
         current = start_from
-        for i in range(iters):
+        for step in range(iters):
             await asyncio.sleep(interval)
-            current += step
-            self._update_status(str(id), i, current)
+            current += shift
+            self._update_status(str(task_id), step, current)
         del self.status[str(task_id)]
 
-    def _update_status(self, task_id, step, current):
+    def _update_status(self, task_id, shift, current):
         """Update selected task status.
 
         Args:
@@ -50,5 +50,5 @@ class Tasks():
         Returns:
             none.
         """
-        out = f"Процесс:{task_id}, текущий шаг:{step}, текущая сумма:{current}"
+        out = f'Процесс:{task_id}, текущий шаг:{shift}, текущая сумма:{current}'
         self.status[str(task_id)] = out
