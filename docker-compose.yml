@@ -3,7 +3,7 @@ version: '4'
 services:
   async:
     build: .
-    command: uvicorn main:app --reload --host 127.0.0.1 --port 8000
+    command: uvicorn app.main:app --reload --host 0.0.0.0
     ports:
      - 8000:8000	
     volumes:

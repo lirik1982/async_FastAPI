@@ -7,7 +7,7 @@ summary
 from fastapi import APIRouter, Depends, Request
 from pydantic import BaseModel
 
-from tasks import Tasks
+from app.tasks import Tasks
 
 router = APIRouter()
 

@@ -14,8 +14,8 @@ N1 N d это первый элемент прогрессии,
 # import uvicorn
 from fastapi import FastAPI
 
-from routers import router
-from tasks import Tasks
+from app.routers import router
+from app.tasks import Tasks
 
 app = FastAPI()
 app.tasks = Tasks()
