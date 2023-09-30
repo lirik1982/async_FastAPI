@@ -11,7 +11,7 @@ N1 N d это первый элемент прогрессии,
 кол-во итераций, дельта он же шаг прогрессии
 """
 
-import uvicorn
+# import uvicorn
 from fastapi import FastAPI
 
 from routers import router
@@ -23,11 +23,11 @@ app.tasks = Tasks()
 app.include_router(router, prefix='/api/v1/tasks')
 
 
-if __name__ == '__main__':
-    uvicorn.run(
-        'main:app',
-        host='127.0.0.1',
-        log_level='info',
-        port=8000,
-        workers=1,
-    )
+# if __name__ == '__main__':
+#     uvicorn.run(
+#         'main:app',
+#         host='127.0.0.1',
+#         log_level='info',
+#         port=80,
+#         workers=1,
+#     )
