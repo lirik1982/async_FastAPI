@@ -1,2 +1,2 @@
-curl --location --request GET "http://127.0.0.1:8000/addtask/?N=15&N1=1&step=3&interval=1"
-                                                                    
+curl -X POST "http://127.0.0.1:8000/api/v1/tasks/add/" -H "Content-Type: application/json" -d @data.json 
+pause
